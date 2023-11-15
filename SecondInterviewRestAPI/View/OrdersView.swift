@@ -13,17 +13,19 @@ struct OrdersView: View {
     
     var body: some View {
         NavigationStack {
-            if let orders = ordersVM.orders {
-                ScrollView {
-                    ForEach(orders) { order in
-                        OrderRowView(order: order)
+            ZStack {
+                if let orders = ordersVM.orders {
+                    List {
+                        ForEach(orders) { order in
+                            OrderRowView(order: order)
+                        }
                     }
+                } else {
+                    Text("Loading orders...")
                 }
-            } else {
-                Text("Loading orders...")
             }
+            .navigationTitle("Orders")
         }
-        .navigationTitle("Orders")
         .navigationDestination(for: Order.self) { order in
             Text(order.id)
         }
@@ -36,29 +38,39 @@ private struct OrderRowView: View {
     
     var body: some View {
         HStack {
-            Text("$\(String(format:"%.2f", order.items.totalCost()))")
-                .font(.largeTitle)
-
-            VStack(alignment: .leading) {
-                HStack {
-                    Spacer()
-                    
-                    Text("Items: \(order.items.count)")
-                        .font(.headline)
-                }
+            VStack {
+                Text("$\(String(format:"%.2f", order.items.totalCost()))")
+                    .font(.title)
                 
-                Group {
-                    Text("Purchaser Info")
-                        .font(.caption)
-                    
-                    Text("Name: \(order.purchaser.name)")
-                    
-                    Text("Email: \(order.purchaser.email)")
-                    
-                    Text("Address: \(order.purchaser.address)")
-                }
-                .font(.callout)
+                Text("Items: \(order.items.count)")
+                    .font(.headline)
             }
+            .padding(.trailing)
+            
+            VStack(alignment: .leading) {                
+                purchaserInfoRow(infoTitle: "Name", value: order.purchaser.name)
+                
+                Divider()
+                
+                purchaserInfoRow(infoTitle: "Email", value: order.purchaser.email)
+                
+                Divider()
+                
+                purchaserInfoRow(infoTitle: "Address", value: order.purchaser.address)
+                    .lineLimit(2)
+            }
+            .lineLimit(1)
+            .font(.caption)
+            
+            Spacer()
+        }
+    }
+    
+    func purchaserInfoRow(infoTitle: String, value: String) -> some View {
+        HStack {
+            Text(infoTitle + ":")
+            
+            Text(value)
         }
     }
 }
