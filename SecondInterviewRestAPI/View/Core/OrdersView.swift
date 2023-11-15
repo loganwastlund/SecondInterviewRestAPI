@@ -17,18 +17,33 @@ struct OrdersView: View {
     var body: some View {
         NavigationStack(path: $navPath) {
             ZStack {
-                if let orders = ordersVM.orders {
-                    List {
-                        ForEach(searchResults) { order in
-                            OrderRowView(order: order)
+                VStack {
+                    if let _ = ordersVM.orders {
+                        HStack {
+                            Menu {
+                                ForEach(OrdersViewModel.SortOption.allCases, id: \.self) { sortOption in
+                                    Button {
+                                        ordersVM.sortOption = sortOption
+                                    } label: {
+                                        Text(sortOption.rawValue)
+                                    }
+                                }
+                            } label: {
+                                Text("Sort by: \(ordersVM.sortOption.rawValue)")
+                            }
+                            
+                            Button {
+                                ordersVM.sortAscending.toggle()
+                            } label: {
+                                Image(systemName: "arrow.up.arrow.down.square")
+                            }
+                            .disabled(ordersVM.sortOption == .none)
                         }
-                    }
-                    .listRowSpacing(Constants.Spacing.ListRowSpacing)
-                    .searchable(text: $searchText)
-                } else {
-                    VStack {
-                        Text("Loading orders...")
-                        ProgressView()
+
+                        ordersList
+                    } else {
+                            Text("Loading orders...")
+                            ProgressView()
                     }
                 }
             }
@@ -41,6 +56,16 @@ struct OrdersView: View {
 }
 
 extension OrdersView {
+    
+    var ordersList: some View {
+        List {
+            ForEach(searchResults.sort(by: ordersVM.sortOption, asending: ordersVM.sortAscending)) { order in
+                OrderRowView(order: order)
+            }
+        }
+        .listRowSpacing(Constants.Spacing.ListRowSpacing)
+        .searchable(text: $searchText)
+    }
     
     var searchResults: [Order] {
         if let orders = ordersVM.orders {

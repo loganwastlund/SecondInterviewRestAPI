@@ -11,6 +11,15 @@ final class OrdersViewModel: ObservableObject {
     
     @Published var orders: [Order]?
     
+    @Published var sortOption: SortOption = .none
+    @Published var sortAscending: Bool = true
+    
+    enum SortOption: String, CaseIterable {
+        case none = "None"
+        case items = "Items"
+        case totalCost = "Cost"
+    }
+    
     init() {
         Task {
             await self.getOrders(count: 50)
