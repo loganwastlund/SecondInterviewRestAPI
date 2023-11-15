@@ -11,6 +11,8 @@ final class OrdersViewModel: ObservableObject {
     
     @Published var orders: [Order]?
     
+    @Published var searchText: String = ""
+    
     @Published var sortOption: SortOption = .none
     @Published var sortAscending: Bool = true
     

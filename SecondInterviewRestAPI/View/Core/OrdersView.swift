@@ -11,34 +11,13 @@ struct OrdersView: View {
     
     @StateObject var ordersVM: OrdersViewModel
     @State var navPath = NavigationPath()
-    
-    @State private var searchText: String = ""
-    
+        
     var body: some View {
         NavigationStack(path: $navPath) {
             ZStack {
                 VStack {
                     if let _ = ordersVM.orders {
-                        HStack {
-                            Menu {
-                                ForEach(OrdersViewModel.SortOption.allCases, id: \.self) { sortOption in
-                                    Button {
-                                        ordersVM.sortOption = sortOption
-                                    } label: {
-                                        Text(sortOption.rawValue)
-                                    }
-                                }
-                            } label: {
-                                Text("Sort by: \(ordersVM.sortOption.rawValue)")
-                            }
-                            
-                            Button {
-                                ordersVM.sortAscending.toggle()
-                            } label: {
-                                Image(systemName: "arrow.up.arrow.down.square")
-                            }
-                            .disabled(ordersVM.sortOption == .none)
-                        }
+                        sortSection
 
                         ordersList
                     } else {
@@ -57,39 +36,64 @@ struct OrdersView: View {
 
 extension OrdersView {
     
+    var sortSection: some View {
+        HStack {
+            Menu {
+                ForEach(OrdersViewModel.SortOption.allCases, id: \.self) { sortOption in
+                    Button {
+                        ordersVM.sortOption = sortOption
+                    } label: {
+                        Text(sortOption.rawValue)
+                    }
+                }
+            } label: {
+                Text("Sort by: \(ordersVM.sortOption.rawValue)")
+            }
+            
+            Button {
+                ordersVM.sortAscending.toggle()
+            } label: {
+                Image(systemName: "arrow.up.arrow.down.square")
+            }
+            .disabled(ordersVM.sortOption == .none)
+        }
+    }
+    
     var ordersList: some View {
         List {
-            ForEach(searchResults.sort(by: ordersVM.sortOption, asending: ordersVM.sortAscending)) { order in
+            ForEach(ordersSearchedAndSorted) { order in
                 OrderRowView(order: order)
             }
         }
         .listRowSpacing(Constants.Spacing.ListRowSpacing)
-        .searchable(text: $searchText)
+        .searchable(text: $ordersVM.searchText)
     }
     
-    var searchResults: [Order] {
+    var ordersSearchedAndSorted: [Order] {
+        var ordersSearchedAndSorted: [Order] = []
         if let orders = ordersVM.orders {
-            if searchText.isEmpty {
-                return orders
+            if ordersVM.searchText.isEmpty {
+                ordersSearchedAndSorted = orders
             } else {
-                return orders.filter { order in
+                ordersSearchedAndSorted = orders.filter { order in
                     for item in order.items {
-                        if item.productName.contains(searchText) {
+                        if item.productName.contains(ordersVM.searchText) {
                             return true
                         }
                     }
                     
-                    if order.purchaser.name.contains(searchText) {
+                    if order.purchaser.name.contains(ordersVM.searchText) {
                         return true
-                    } else if order.purchaser.address.contains(searchText) {
+                    } else if order.purchaser.address.contains(ordersVM.searchText) {
                         return true
-                    } else if order.purchaser.email.contains(searchText) {
+                    } else if order.purchaser.email.contains(ordersVM.searchText) {
                         return true
                     } else {
                         return false
                     }
                 }
             }
+            return ordersSearchedAndSorted.sort(by: ordersVM.sortOption, asending: ordersVM.sortAscending)
         }
         return []
     }

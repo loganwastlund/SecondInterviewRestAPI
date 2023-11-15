@@ -44,13 +44,18 @@ extension OrderDetailView {
     
     var itemsSection: some View {
         Section(header: Text("Items")) {
-            ForEach(order.items.indices, id: \.self) { index in
-                HStack {
-                    Text("\(order.items[index].productName)")
+            ForEach(order.items) { item in
+                VStack {
+                    HStack {
+                        Text(item.productName)
+                        
+                        Spacer()
+                        
+                        Text(item.costString())
+                    }
                     
-                    Spacer()
-                    
-                    Text("\(order.items[index].costString())")
+                    Text(item.id)
+                        .font(.caption)
                 }
             }
         }
