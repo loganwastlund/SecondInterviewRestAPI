@@ -17,6 +17,8 @@
 		2A0F40822B054BD200C97C7B /* OrderResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0F40812B054BD200C97C7B /* OrderResponse.swift */; };
 		2A0F40842B05509D00C97C7B /* Purchaser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0F40832B05509D00C97C7B /* Purchaser.swift */; };
 		2A0F40872B05510500C97C7B /* Array + EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0F40862B05510500C97C7B /* Array + EXT.swift */; };
+		2A0F40892B05740800C97C7B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0F40882B05740800C97C7B /* Constants.swift */; };
+		2A0F408C2B0574CF00C97C7B /* OrderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0F408B2B0574CF00C97C7B /* OrderDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +33,8 @@
 		2A0F40812B054BD200C97C7B /* OrderResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderResponse.swift; sourceTree = "<group>"; };
 		2A0F40832B05509D00C97C7B /* Purchaser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Purchaser.swift; sourceTree = "<group>"; };
 		2A0F40862B05510500C97C7B /* Array + EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array + EXT.swift"; sourceTree = "<group>"; };
+		2A0F40882B05740800C97C7B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		2A0F408B2B0574CF00C97C7B /* OrderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,7 +89,9 @@
 		2A0F40782B05471100C97C7B /* View */ = {
 			isa = PBXGroup;
 			children = (
+				2A0F40882B05740800C97C7B /* Constants.swift */,
 				2A0F406C2B0536B900C97C7B /* OrdersView.swift */,
+				2A0F408A2B0574BE00C97C7B /* Subviews */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -115,6 +121,14 @@
 				2A0F40862B05510500C97C7B /* Array + EXT.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		2A0F408A2B0574BE00C97C7B /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				2A0F408B2B0574CF00C97C7B /* OrderDetailView.swift */,
+			);
+			path = Subviews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -191,10 +205,12 @@
 				2A0F40802B0547F800C97C7B /* Item.swift in Sources */,
 				2A0F40822B054BD200C97C7B /* OrderResponse.swift in Sources */,
 				2A0F406D2B0536B900C97C7B /* OrdersView.swift in Sources */,
+				2A0F408C2B0574CF00C97C7B /* OrderDetailView.swift in Sources */,
 				2A0F407A2B05472500C97C7B /* OrdersViewModel.swift in Sources */,
 				2A0F407E2B05479700C97C7B /* Order.swift in Sources */,
 				2A0F406B2B0536B900C97C7B /* SecondInterviewRestAPIApp.swift in Sources */,
 				2A0F40872B05510500C97C7B /* Array + EXT.swift in Sources */,
+				2A0F40892B05740800C97C7B /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

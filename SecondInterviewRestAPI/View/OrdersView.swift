@@ -10,25 +10,63 @@ import SwiftUI
 struct OrdersView: View {
     
     @StateObject var ordersVM: OrdersViewModel
+    @State var navPath = NavigationPath()
+    
+    @State private var searchText: String = ""
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navPath) {
             ZStack {
                 if let orders = ordersVM.orders {
                     List {
-                        ForEach(orders) { order in
+                        ForEach(searchResults) { order in
                             OrderRowView(order: order)
                         }
                     }
+                    .listRowSpacing(Constants.Spacing.ListRowSpacing)
+                    .searchable(text: $searchText)
                 } else {
-                    Text("Loading orders...")
+                    VStack {
+                        Text("Loading orders...")
+                        ProgressView()
+                    }
                 }
             }
             .navigationTitle("Orders")
+            .navigationDestination(for: Order.self) { order in
+                OrderDetailView(order: order)
+            }
         }
-        .navigationDestination(for: Order.self) { order in
-            Text(order.id)
+    }
+}
+
+extension OrdersView {
+    
+    var searchResults: [Order] {
+        if let orders = ordersVM.orders {
+            if searchText.isEmpty {
+                return orders
+            } else {
+                return orders.filter { order in
+                    for item in order.items {
+                        if item.productName.contains(searchText) {
+                            return true
+                        }
+                    }
+                    
+                    if order.purchaser.name.contains(searchText) {
+                        return true
+                    } else if order.purchaser.address.contains(searchText) {
+                        return true
+                    } else if order.purchaser.email.contains(searchText) {
+                        return true
+                    } else {
+                        return false
+                    }
+                }
+            }
         }
+        return []
     }
 }
 
@@ -37,17 +75,20 @@ private struct OrderRowView: View {
     let order: Order
     
     var body: some View {
-        HStack {
-            VStack {
-                Text("$\(String(format:"%.2f", order.items.totalCost()))")
-                    .font(.title)
+        NavigationLink(value: order) {
+            VStack(alignment: .leading) {
+                HStack {
+                    Text(order.totalCostOfItemsString())
+                        .font(.largeTitle)
+                    
+                    Spacer()
+                    
+                    Text("Items: \(order.items.count)")
+                        .font(.headline)
+                }
                 
-                Text("Items: \(order.items.count)")
-                    .font(.headline)
-            }
-            .padding(.trailing)
-            
-            VStack(alignment: .leading) {                
+                Divider()
+                
                 purchaserInfoRow(infoTitle: "Name", value: order.purchaser.name)
                 
                 Divider()
@@ -60,9 +101,7 @@ private struct OrderRowView: View {
                     .lineLimit(2)
             }
             .lineLimit(1)
-            .font(.caption)
-            
-            Spacer()
+            .font(.footnote)
         }
     }
     
@@ -73,8 +112,4 @@ private struct OrderRowView: View {
             Text(value)
         }
     }
-}
-
-#Preview {
-    OrdersView(ordersVM: OrdersViewModel())
 }

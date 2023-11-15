@@ -17,4 +17,8 @@ struct Item: Codable, Identifiable {
         case productName = "product_name"
         case cost
     }
+    
+    func costString() -> String {
+        "$\(String(format:"%.2f", self.cost))"
+    }
 }

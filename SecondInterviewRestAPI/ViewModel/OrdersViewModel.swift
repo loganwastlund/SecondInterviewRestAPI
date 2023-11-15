@@ -13,7 +13,7 @@ final class OrdersViewModel: ObservableObject {
     
     init() {
         Task {
-            await self.getOrders(count: 256)
+            await self.getOrders(count: 50)
         }
     }
     

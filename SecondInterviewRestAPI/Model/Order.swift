@@ -19,4 +19,8 @@ struct Order: Codable, Equatable, Hashable, Identifiable {
     static func == (lhs: Order, rhs: Order) -> Bool {
         lhs.id == rhs.id
     }
+    
+    func totalCostOfItemsString() -> String {
+        "$\(String(format:"%.2f", self.items.totalCost()))"
+    }
 }
